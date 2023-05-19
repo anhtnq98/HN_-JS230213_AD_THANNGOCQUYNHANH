@@ -105,7 +105,7 @@ router.put("/:id", (req, res) => {
   }
 });
 
-router.delete("/users/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   let { id } = req.params;
   let users = JSON.parse(fs.readFileSync("./user-post-api/users.json"));
   let newUser = users.filter((e) => +e.id !== +id);
