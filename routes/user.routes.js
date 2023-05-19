@@ -30,6 +30,24 @@ router.get(`/:id`, (req, res) => {
   } catch (error) {}
 });
 
+// Lấy về tất cả bài viết theo người dùng
+router.get(`/:id/posts`, (req, res) => {
+  let { id } = req.params;
+  let users = JSON.parse(fs.readFileSync(`./user-post-api/users.json`));
+  let posts = JSON.parse(fs.readFileSync(`./user-post-api/posts.json`));
+  try {
+    let findUserById = users.find((e, i) => e.id === +id);
+    let findPostbyUserID = posts.filter((e, i) => e.userId === +id);
+    if (findUserById) {
+      res.status(200).json(findPostbyUserID);
+    } else {
+      res.status(404).json({
+        messesge: `Không tìm thấy người dùng`,
+      });
+    }
+  } catch (error) {}
+});
+
 // thêm user mới
 router.post("/", (req, res) => {
   let { username, email } = req.body;
@@ -87,7 +105,7 @@ router.put("/:id", (req, res) => {
       messege: "Email không được để trống",
     });
   } else if (userIndex === -1) {
-    res.json({
+    res.status(404).json({
       messege: "Không tìm thấy người dùng",
     });
   } else {
